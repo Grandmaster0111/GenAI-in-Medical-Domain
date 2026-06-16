@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+data/corpus.jsonl
+data/eval/*.jsonl
+data/indices/
+results/*.json
+results/*.csv
+results/*.png
+!data/eval/.gitkeep
+!results/.gitkeep
