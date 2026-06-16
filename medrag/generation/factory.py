@@ -11,5 +11,5 @@ def get_backend(model_name: str) -> GenerationBackend:
     if spec.backend == "local_hf":
         return LocalHFBackend(spec.model_id)
     if spec.backend == "hf_inference_api":
-        return HFInferenceAPIBackend(spec.model_id)
+        return HFInferenceAPIBackend(spec.model_id, provider=spec.provider)
     raise ValueError(f"Unknown backend type '{spec.backend}'")

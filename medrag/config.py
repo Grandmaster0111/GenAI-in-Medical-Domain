@@ -43,16 +43,21 @@ class ModelSpec:
     name: str
     backend: str  # "local_hf" or "hf_inference_api"
     model_id: str
+    provider: str | None = None  # HF Inference provider, e.g. "featherless-ai"; None = auto-route
 
 
 MODEL_REGISTRY = {
     "flan-t5-small": ModelSpec("flan-t5-small", "local_hf", "google/flan-t5-small"),
-    "biomistral-7b": ModelSpec("biomistral-7b", "hf_inference_api", "BioMistral/BioMistral-7B"),
+    # BioMistral/BioMistral-7B has zero HF Inference providers (confirmed via model_info
+    # inferenceProviderMapping) and cannot be called through the serverless API. Substituted
+    # with Med42-8B, a real medical-domain instruction-tuned model available via featherless-ai.
+    "biomistral-7b": ModelSpec("biomistral-7b", "hf_inference_api", "m42-health/Llama3-Med42-8B", provider="featherless-ai"),
+    # google/medgemma-4b-it also has no HF Inference providers as of this writing; unconfirmed/unavailable.
     "medgemma-4b-it": ModelSpec("medgemma-4b-it", "hf_inference_api", "google/medgemma-4b-it"),
     # Niche models named in the thesis; unconfirmed on HF serverless Inference API.
     # Swap model_id below for an available checkpoint if these 404.
-    "typhoon-si-med-thin": ModelSpec("typhoon-si-med-thin", "hf_inference_api", "scb10x/llama3.1-typhoon2-8b-instruct"),
-    "ii-medica": ModelSpec("ii-medica", "hf_inference_api", "aaditya/Llama3-OpenBioLLM-8B"),
+    "typhoon-si-med-thin": ModelSpec("typhoon-si-med-thin", "hf_inference_api", "scb10x/llama3.1-typhoon2-8b-instruct", provider="featherless-ai"),
+    "ii-medica": ModelSpec("ii-medica", "hf_inference_api", "aaditya/Llama3-OpenBioLLM-8B", provider="featherless-ai"),
 }
 
 RETRIEVAL_TOP_K = 5
