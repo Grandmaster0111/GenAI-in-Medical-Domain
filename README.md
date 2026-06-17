@@ -94,9 +94,14 @@ saved alongside the predicted answer.
   MMLU-Med, and BioASQ — not the full MIRAGE benchmark splits.
 - **BioASQ**: uses `rag-datasets/rag-mini-bioasq` as a substitute, since the original BioASQ dataset
   requires registration.
-- **Large models**: BioMistral-7B / MedGemma-4B-IT run via the HF Inference API rather than locally,
-  since the available GPU (4GB VRAM) can't host them. "Typhoon-SI-Med-Thin" and "II-Medica" from the
-  thesis are niche names not confirmed available on HF serverless Inference API — their entries in
-  `MODEL_REGISTRY` are best-effort guesses and may need to be swapped for an available model id.
-- Results from this codebase are illustrative of the architecture, not a reproduction of the thesis's
-  reported accuracy numbers or Figure 4.1.
+- **Large models**: run via the HF Inference API rather than locally, since the available GPU (4GB
+  VRAM) can't host 7B/4B models. `BioMistral/BioMistral-7B` itself has zero HF Inference providers
+  (confirmed via `model_info`) and cannot be called through the serverless API at all, so the
+  `biomistral-7b` registry entry actually points to `m42-health/Llama3-Med42-8B`, a real medical-domain
+  model available via the `featherless-ai` provider. `medgemma-4b-it` has the same zero-provider
+  problem and is unconfirmed/unavailable. See `medrag/config.py:MODEL_REGISTRY` for the exact mapping.
+- Results from this codebase (`results/*.json`, `results/summary.csv`) are illustrative of the
+  architecture on a small sample, not a reproduction of the thesis's reported accuracy numbers.
+  **The thesis's actual full-scale results (Tables 4.1-4.5, Figure 4.1) are transcribed for reference
+  in [`results/thesis_reported_results.md`](results/thesis_reported_results.md) — those numbers come
+  from the original full-scale experiment described in `report.pdf`, not from this repo's code.**
